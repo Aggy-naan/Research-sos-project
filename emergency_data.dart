@@ -1,8 +1,8 @@
 class EmergencyData {
   String type; // Type of emergency
   int people; // Number of people in danger
-  String needs; // Specific needs
-  String injuries; // Information on injuries
+  String? needs; // Specific needs (optional)
+  String? injuries; // Information on injuries (optional)
   String location; // GPS coordinates or descriptive location
   String contact; // Phone number for follow-up
   DateTime timestamp; // Date and time of the message
@@ -11,8 +11,8 @@ class EmergencyData {
   EmergencyData({
     required this.type,
     required this.people,
-    required this.needs,
-    required this.injuries,
+    this.needs, // Optional
+    this.injuries, // Optional
     required this.location,
     required this.contact,
     required this.timestamp,
@@ -23,8 +23,8 @@ class EmergencyData {
     return {
       'type': type,
       'people': people,
-      'needs': needs,
-      'injuries': injuries,
+      'needs': needs ?? '', // Default to empty string if null
+      'injuries': injuries ?? '', // Default to empty string if null
       'location': location,
       'contact': contact,
       'timestamp': timestamp.toIso8601String(),
