@@ -12,6 +12,7 @@ class SOSPage1 extends StatefulWidget {
 class _SOSPage1State extends State<SOSPage1> {
   String _selectedOption = '';
   final TextEditingController _controller = TextEditingController();
+  final TextEditingController _otherController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isSubmitPressed = false;
 
@@ -41,7 +42,7 @@ class _SOSPage1State extends State<SOSPage1> {
 
       // Create an EmergencyData instance
       EmergencyData emergencyData = EmergencyData(
-        type: _selectedOption,
+        type: _selectedOption == 'Other' ? _otherController.text : _selectedOption,
         people: int.parse(_controller.text),
         needs: "", // Placeholder
         injuries: "", // Placeholder
@@ -63,6 +64,7 @@ class _SOSPage1State extends State<SOSPage1> {
   @override
   void dispose() {
     _controller.dispose();
+    _otherController.dispose();
     super.dispose();
   }
 
@@ -97,6 +99,21 @@ class _SOSPage1State extends State<SOSPage1> {
                   ],
                 ),
                 const SizedBox(height: 20),
+                if (_selectedOption == 'Other')
+                  TextFormField(
+                    controller: _otherController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Please specify the disaster',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please specify the disaster';
+                      }
+                      return null;
+                    },
+                  ),
+                if (_selectedOption == 'Other') const SizedBox(height: 20),
                 TextFormField(
                   controller: _controller,
                   decoration: const InputDecoration(
@@ -117,6 +134,13 @@ class _SOSPage1State extends State<SOSPage1> {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _submitForm,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white, // Background color
+                    foregroundColor: Colors.purple, // Text color
+                    side: BorderSide(color: Colors.black), // Border color
+                    elevation: 5, // Elevation for shadow
+                    shadowColor: Colors.black, // Shadow color
+                  ),
                   child: const Text('Submit'),
                 ),
                 if (_validateSelection() != null)
@@ -124,7 +148,7 @@ class _SOSPage1State extends State<SOSPage1> {
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       _validateSelection()!,
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                   ),
               ],
@@ -143,10 +167,15 @@ class _SOSPage1State extends State<SOSPage1> {
         backgroundColor: isSelected ? Colors.green : Colors.blue, // Background color
         foregroundColor: Colors.white, // Text color
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10), // Rounded edges
+          borderRadius: BorderRadius.circular(35), // Rounded edges
         ),
+        padding: const EdgeInsets.all(8), // Reduce padding for smaller buttons
+        minimumSize: const Size(100, 50), // Minimum size of the button
       ),
-      child: Text(option),
+      child: Text(
+        option,
+        style: const TextStyle(fontSize: 19), // Reduce font size
+      ),
     );
   }
 }
