@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'emergency_data.dart'; // Import the EmergencyData class
+import 'confirmation_page.dart'; // Import the ConfirmationPage
 
 class SOSPage2 extends StatefulWidget {
   final EmergencyData emergencyData; // Receive the initial data from SOSPage1
@@ -28,8 +29,13 @@ class _SOSPage2State extends State<SOSPage2> {
       widget.emergencyData.needs = _needsController.text;
       widget.emergencyData.injuries = _injuriesController.text;
 
-      // Here you can handle the form submission, e.g., navigate to a confirmation page or send the SMS
-      print(widget.emergencyData.toJson()); // Debug: print the JSON data
+      // Navigate to ConfirmationPage with the updated emergency data
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ConfirmationPage(emergencyData: widget.emergencyData),
+        ),
+      );
     }
   }
 
@@ -54,12 +60,6 @@ class _SOSPage2State extends State<SOSPage2> {
                     border: OutlineInputBorder(),
                     labelText: 'Specific needs',
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter specific needs';
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
@@ -68,16 +68,17 @@ class _SOSPage2State extends State<SOSPage2> {
                     border: OutlineInputBorder(),
                     labelText: 'Injuries',
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter information about injuries';
-                    }
-                    return null;
-                  },
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: _submitForm,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white, // Background color
+                    foregroundColor: Colors.purple, // Text color
+                    side: BorderSide(color: Colors.black, width: 3), // Increase border thickness
+                    elevation: 5, // Elevation for shadow
+                    shadowColor: Colors.black, // Shadow color
+                  ),
                   child: const Text('Submit'),
                 ),
               ],
